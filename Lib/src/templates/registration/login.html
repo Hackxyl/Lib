@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <h2 class="text-2xl font-bold mb-6 text-center text-indigo-600 dark:text-indigo-400">Login to Your Account</h2>
+        
+        <form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="hidden" name="next" value="{{ next|default:'/' }}">
+  <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded mt-4 hover:bg-blue-700">Login</button>
+</form>
+
+
+        <div class="text-center mt-4">
+            <span class="text-sm text-gray-600 dark:text-gray-300">Don't have an account?</span>
+            <a href="{% url 'register' %}" class="text-indigo-600 dark:text-indigo-400 hover:underline ml-1">Register</a>
+        </div>
+    </div>
+{% endblock %}
