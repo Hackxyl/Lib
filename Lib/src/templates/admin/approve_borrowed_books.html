@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="max-w-3xl mx-auto mt-10 p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md">
+  <h2 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-6 flex items-center gap-2">
+    ✅ Pending Borrow Requests
+  </h2>
+  {% if pending_borrows %}
+    <div class="space-y-6">
+      {% for borrow in pending_borrows %}
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 flex flex-col md:flex-row md:items-center md:justify-between bg-gray-50 dark:bg-gray-800">
+          <div>
+            <p class="font-semibold text-gray-800 dark:text-white mb-1">
+              <span class="text-indigo-600 dark:text-indigo-400">User:</span> {{ borrow.user.username }}
+            </p>
+            <p class="text-gray-600 dark:text-gray-300 mb-1">
+              <span class="font-medium">Book:</span> {{ borrow.book.title }}
+            </p>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">
+              Requested on: {{ borrow.borrow_date|date:"M d, Y" }}
+            </p>
+          </div>
+          <form method="post" class="mt-4 md:mt-0">
+            {% csrf_token %}
+            <input type="hidden" name="borrow_id" value="{{ borrow.id }}">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg shadow font-semibold transition">
+              Approve
+            </button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center text-gray-500 dark:text-gray-400 py-10">
+      <p>No pending requests.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

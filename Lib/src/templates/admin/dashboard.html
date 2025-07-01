@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="max-w-6xl mx-auto mt-10 px-6">
+  <h1 class="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-6">📊 Admin Dashboard</h1>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Total Books -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow text-center">
+      <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Books</h3>
+      <p class="text-3xl font-bold text-indigo-600">{{ total_books }}</p>
+    </div>
+
+    <!-- Total Users -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow text-center">
+      <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Users</h3>
+      <p class="text-3xl font-bold text-green-600">{{ total_users }}</p>
+    </div>
+
+    <!-- Active Borrows -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow text-center">
+      <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Borrows</h3>
+      <p class="text-3xl font-bold text-yellow-500">{{ total_borrows }}</p>
+    </div>
+
+    <!-- Overdue -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow text-center">
+      <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Overdue</h3>
+      <p class="text-3xl font-bold text-red-500">{{ overdue_returns }}</p>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <a href="{% url 'books' %}" class="bg-indigo-100 dark:bg-indigo-700 text-center py-4 rounded-lg shadow hover:bg-indigo-200">
+      📚 Manage Books
+    </a>
+    <a href="/admin/users/customuser/" class="bg-green-100 dark:bg-green-700 text-center py-4 rounded-lg shadow hover:bg-green-200">
+      👥 Manage Users
+    </a>
+    <a href="{% url 'borrowed_books' %}" class="bg-yellow-100 dark:bg-yellow-700 text-center py-4 rounded-lg shadow hover:bg-yellow-200">
+      📖 View Borrowed Books
+    </a>
+    <a href="{% url 'approve_borrowed_books' %}" class="bg-pink-100 dark:bg-pink-700 text-center py-4 rounded-lg shadow hover:bg-pink-200">
+    ✅ Approve Borrow Requests
+  </a>
+  </div>
+</div>
+<br><br>
+{% endblock %}
