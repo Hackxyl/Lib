@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block body %}
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-r from-blue-600 to-indigo-800 text-white py-20 md:py-32">
+  <div class="container mx-auto px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">Welcome to Our Digital Library</h1>
+      <p class="text-xl mb-10 max-w-2xl mx-auto">
+        Discover thousands of books, borrow with ease, and expand your knowledge with our growing collection
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="{% url 'books' %}" class="px-8 py-4 bg-white text-indigo-700 font-bold rounded-lg shadow-lg hover:bg-gray-100 transition transform hover:-translate-y-1">
+          Browse Our Collection
+        </a>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'register' %}" class="px-8 py-4 bg-indigo-700 border-2 border-white text-white font-bold rounded-lg shadow-lg hover:bg-indigo-800 transition transform hover:-translate-y-1">
+          Join Our Library
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  
+  <!-- Decorative wave -->
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg viewBox="0 0 1440 120" class="fill-current text-white">
+      <path d="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,85.3C672,75,768,85,864,96C960,107,1056,117,1152,112C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+    </svg>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">Why Choose Our Library?</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Feature 1 -->
+      <div class="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-xl transition">
+        <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-gray-800">Extensive Collection</h3>
+        <p class="text-gray-600">
+          Access thousands of books across all genres, from classic literature to modern bestsellers.
+        </p>
+      </div>
+      
+      <!-- Feature 2 -->
+      <div class="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-xl transition">
+        <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-gray-800">Flexible Borrowing</h3>
+        <p class="text-gray-600">
+          Borrow books for up to 4 weeks with easy renewal options. No late fees for the first week.
+        </p>
+      </div>
+      
+      <!-- Feature 3 -->
+      <div class="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-xl transition">
+        <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-gray-800">Digital Access</h3>
+        <p class="text-gray-600">
+          Access eBooks and audiobooks anywhere with our mobile app. Available 24/7 on all devices.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Books Section -->
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-800">Featured Books</h2>
+      <a href="{% url 'books' %}" class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
+        View All Books
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+    
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {% for book in featured_books %}
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 hover:shadow-lg transition">
+          <h3 class="text-lg font-semibold text-indigo-700 dark:text-indigo-400 mb-2">{{ book.title }}</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Author: {{ book.author }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">ISBN: {{ book.isbn }}</p>
+          {% if book.available %}
+            <span class="inline-block mt-3 px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">Available</span>
+          {% else %}
+            <span class="inline-block mt-3 px-3 py-1 bg-red-100 text-red-700 text-xs rounded-full">Checked Out</span>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p class="text-center text-gray-500 col-span-full">No featured books available.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+      
+      
+     
+
+
+
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-16 bg-indigo-700 text-white">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div class="p-6">
+        <div class="text-4xl md:text-5xl font-bold mb-2">25,000+</div>
+        <div class="text-lg">Books Available</div>
+      </div>
+      <div class="p-6">
+        <div class="text-4xl md:text-5xl font-bold mb-2">15,000+</div>
+        <div class="text-lg">Active Members</div>
+      </div>
+      <div class="p-6">
+        <div class="text-4xl md:text-5xl font-bold mb-2">500+</div>
+        <div class="text-lg">New Books Monthly</div>
+      </div>
+      <div class="p-6">
+        <div class="text-4xl md:text-5xl font-bold mb-2">24/7</div>
+        <div class="text-lg">Digital Access</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">What Our Members Say</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Testimonial 1 -->
+      <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+        <div class="flex items-center mb-6">
+          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16"></div>
+          <div class="ml-4">
+            <h4 class="font-bold text-gray-800">Sarah Johnson</h4>
+            <p class="text-gray-600">Student Member</p>
+          </div>
+        </div>
+        <p class="text-gray-600 italic">
+          "This library has completely transformed my reading habits. The online borrowing system is so convenient and the selection is amazing!"
+        </p>
+        <div class="flex mt-4 text-yellow-400">
+          <!-- 5 Stars -->
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+        <div class="flex items-center mb-6">
+          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16"></div>
+          <div class="ml-4">
+            <h4 class="font-bold text-gray-800">Michael Chen</h4>
+            <p class="text-gray-600">Premium Member</p>
+          </div>
+        </div>
+        <p class="text-gray-600 italic">
+          "As a busy professional, the audiobook collection has been a lifesaver. I can listen during my commute and never run out of options."
+        </p>
+        <div class="flex mt-4 text-yellow-400">
+          <!-- 4.5 Stars -->
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+        <div class="flex items-center mb-6">
+          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16"></div>
+          <div class="ml-4">
+            <h4 class="font-bold text-gray-800">Emma Rodriguez</h4>
+            <p class="text-gray-600">Family Plan</p>
+          </div>
+        </div>
+        <p class="text-gray-600 italic">
+          "My kids love the children's section and the summer reading programs. The library staff is always helpful and knowledgeable."
+        </p>
+        <div class="flex mt-4 text-yellow-400">
+          <!-- 5 Stars -->
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+{% endblock %}
+
+
+        
+
+       

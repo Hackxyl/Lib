@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Library Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .book-cover {
+            transition: all 0.3s ease;
+        }
+        .book-cover:hover {
+            transform: rotate(-2deg);
+        }
+        .search-box {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .search-box:focus-within {
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        body {
+           transition: background-color 0.3s ease; 
+        }
+        
+        .sidebar {
+            transition: transform 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes modern-footer-up-down {
+            0% {
+              transform: translateY(100%);
+              opacity: 1;
+            }
+            40% {
+              transform: translateY(0%);
+              opacity: 1;
+            }
+            80% {
+              transform: translateY(0%);
+              opacity: 1;
+            }
+            90% {
+              transform: translateY(-50%);
+              opacity: 0.5;
+            }
+            100% {
+              transform: translateY(-100%);
+              opacity: 0;
+            }
+        }
+        .animate-modern-footer-up-down {
+            animation: modern-footer-up-down 6s cubic-bezier(0.77,0,0.175,1) infinite;
+            white-space: nowrap;
+            will-change: transform, opacity;
+        }
+    </style>
+
+   
+    {% endblock head %}
+</head>
+
+        {% if messages %}
+          <div id="msgbox" class="max-w-xl mx-auto mt-4">
+            {% for message in messages %}
+              <div class="mb-2 px-4 py-3 rounded {{ message.tags }} bg-yellow-100 text-yellow-800">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+          <script>
+            setTimeout(function() {
+              var box = document.getElementById('msgbox');
+              if (box) box.style.display = 'none';
+            }, 4000); // hides after 4 seconds
+          </script>
+        {% endif %}
+  
+ 
+    
+ 
+        {% if user.is_authenticated or not user.is_authenticated %}
+        <!-- Mobile Sidebar Toggle -->
+        <button id="mobileSidebarToggle"
+                class="md:hidden fixed top-4 left-4 z-40 bg-indigo-600 text-white p-2 rounded-lg shadow-lg">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <div id="hoverSidebar"
+             class="group fixed top-0 left-0 h-full w-16 hover:w-64 bg-white dark:bg-gray-900 shadow-lg z-30 overflow-hidden transition-all duration-300 md:block hidden">
+
+          <!-- Sidebar Header -->
+          <a href="{% url 'home' %}"
+             class="flex items-center space-x-2 px-4 py-4 border-b border-gray-200 dark:border-gray-700 text-xl font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-gray-800 transition group">
+            <i class="fas fa-book"></i>
+            <span class="hidden group-hover:inline">Modern Library</span>
+          </a>
+
+          <!-- Navigation -->
+          <nav class="flex flex-col space-y-2 mt-4 text-gray-700 dark:text-gray-200">
+            <a href="{% url 'home' %}" class="flex items-center space-x-4 px-4 py-3 hover:bg-indigo-50 dark:hover:bg-gray-700 group">
+              <i class="fas fa-home w-5 text-center"></i>
+              <span class="hidden group-hover:inline">Home</span>
+            </a>
+            <a href="{% url 'books' %}" class="flex items-center space-x-4 px-4 py-3 hover:bg-indigo-50 dark:hover:bg-gray-700 group">
+              <i class="fas fa-book-open w-5 text-center"></i>
+              <span class="hidden group-hover:inline">Browse Books</span>
+            </a>
+    
+            </a>
+            <a href="{% url 'about' %}" class="flex items-center space-x-4 px-4 py-3 hover:bg-indigo-50 dark:hover:bg-gray-700 group">
+              <i class="fas fa-info-circle w-5 text-center"></i>
+              <span class="hidden group-hover:inline">About</span>
+            </a>
+            <a href="{% url 'contact' %}" class="flex items-center space-x-4 px-4 py-3 hover:bg-indigo-50 dark:hover:bg-gray-700 group">
+              <i class="fas fa-envelope w-5 text-center"></i>
+              <span class="hidden group-hover:inline">Contact</span>
+            </a>
+
+          {% if user.is_authenticated %}
+          {% if user.is_staff or user.role == 'admin' %}
+          <a href="{% url 'admin_dashboard' %}" class="flex items-center space-x-4 px-4 py-3 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-gray-700 group">
+            <i class="fas fa-tools w-5 text-center"></i>
+            <span class="hidden group-hover:inline">Admin Panel</span>
+          </a>
+        {% endif %}
+        {% endif %}
+
+
+        {% if user.is_authenticated and user.is_staff %}
+          <a href="/admin/" class="flex items-center space-x-4 px-4 py-3 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-gray-700 group">
+            <i class="fas fa-cogs w-5 text-center"></i>
+            <span class="hidden group-hover:inline">Django Admin</span>
+          </a>
+        {% endif %}
+
+          </nav>
+
+          <hr class="my-4 border-t border-gray-200 dark:border-gray-700">
+
+          <!-- PROFILE DROPDOWN IN SIDEBAR -->
+          <div class="relative px-4 pb-6 mt-auto">
+            {% if user.is_authenticated %}
+              <!-- Trigger -->
+               <button id="profileMenuBtn"
+                    class="w-full flex items-center space-x-3 text-left text-gray-700 dark:text-gray-200 focus:outline-none">
+              {% if user.profile.photo.url %}
+                <img src="{{ user.profile.photo.url }}" alt="Profile Photo" class="w-8 h-8 rounded-full border-2 border-indigo-400 object-cover">
+              {% else %}
+                <img src="https://ui-avatars.com/api/?name={{ user.username|urlencode }}&background=4f46e5&color=fff" alt="Default Avatar" class="w-8 h-8 rounded-full border-2 border-indigo-400 object-cover">
+              {% endif %}
+              <span class="hidden group-hover:inline text-sm font-medium">{{ user.username }}</span>
+              <i class="fas fa-chevron-down ml-auto hidden group-hover:inline text-xs"></i>
+            </button>
+
+              <!-- Dropdown -->
+        <div id="profileDropdown"
+             class="hidden mt-2 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-md z-20">
+          <a href="{% url 'profile' %}" class="block px-4 py-2 text-sm hover:bg-indigo-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">
+            👤 My Profile
+          </a>
+          <a href="{% url 'settings' %}" class="block px-4 py-2 text-sm hover:bg-indigo-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">
+            ⚙️ Settings
+          </a>
+          {% if user.is_authenticated %}
+            <a href="{% url 'borrowed_books' %}" class="block px-4 py-2 text-sm hover:bg-blue-50 dark:hover:bg-gray-700 text-blue-700 dark:text-blue-300">
+              <i class="fas fa-book w-4 mr-2"></i> Borrowed Books
+            </a>
+    
+          {% endif %}
+
+                <form action="{% url 'logout' %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-800">
+                    🚪 Logout
+                  </button>
+                </form>
+   
+              </div>
+
+            {% else %}
+              <!-- If NOT logged in -->
+              <button id="profileMenuBtn"
+                      class="w-full flex items-center space-x-3 text-left text-gray-700 dark:text-gray-200 focus:outline-none">
+                <i class="fas fa-user-circle text-xl"></i>
+                <span class="hidden group-hover:inline text-sm font-medium">Guest</span>
+                <i class="fas fa-chevron-down ml-auto hidden group-hover:inline text-xs"></i>
+              </button>
+
+              <div id="profileDropdown"
+                   class="hidden mt-2 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-md z-20">
+                <a href="{% url 'login' %}" class="block px-4 py-2 text-sm hover:bg-indigo-50 dark:hover:bg-gray-700 text-indigo-600 dark:text-indigo-400">
+                  🔑 Login
+                </a>
+                <a href="{% url 'register' %}" class="block px-4 py-2 text-sm hover:bg-indigo-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">
+                  📝 Register
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+
+
+
+
+
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const profileBtn = document.getElementById('profileMenuBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+
+            if (profileBtn && profileDropdown) {
+              profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+              });
+
+              document.addEventListener('click', (e) => {
+                if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+                  profileDropdown.classList.add('hidden');
+                }
+              });
+            }
+          });
+        </script>
+
+
+
+
+
+        <div class="max-w-2xl mx-auto mt-8 mb-6">
+          <form action="{% url 'book_search' %}" method="get" class="flex items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow focus-within:ring-2 focus-within:ring-indigo-500 transition">
+            <input
+              type="text"
+              name="q"
+              placeholder="Search for books by title or author..."
+              class="flex-1 px-5 py-2 rounded-l-full bg-transparent text-gray-800 dark:text-gray-200 focus:outline-none"
+              required
+            >
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-r-full font-semibold transition">
+              <i class="fas fa-search"></i>
+              <span class="sr-only">Search</span>
+            </button>
+          </form>
+        </div>
+
+
+
+            <!-- Main Content -->
+            <main class="flex-1 container mx-auto px-4">
+                {% block body %}
+                {% endblock body %}
+            </main>
+        {% if messages %}
+          <div class="max-w-xl mx-auto mt-4">
+            {% for message in messages %}
+              <div class="mb-2 px-4 py-3 rounded 
+                {% if message.tags == 'success' %}bg-green-100 text-green-800
+                {% elif message.tags == 'error' %}bg-red-100 text-red-800
+                {% else %}bg-blue-100 text-blue-800{% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+  
+        {% endif %}
+
+        <footer class="bg-slate-800 text-gray-200 border-t border-slate-700">
+          <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+              <!-- About -->
+              <div>
+                <h3 class="text-xl font-bold text-indigo-400">Modern Library</h3>
+                <p class="mt-4 text-sm text-slate-300">
+                  Empowering knowledge and learning through accessible, inclusive, and innovative library services for all students and faculty.
+                </p>
+              </div>
+
+              <!-- Quick Links -->
+              <div>
+                <h4 class="text-md font-semibold mb-4 text-white">Quick Links</h4>
+                <ul class="space-y-2 text-sm text-slate-300">
+                  <li><a href="{% url 'home' %}" class="hover:underline hover:text-indigo-400">Home</a></li>
+                  <li><a href="{% url 'about' %}" class="hover:underline hover:text-indigo-400">About</a></li>
+                  <li><a href="{% url 'contact' %}" class="hover:underline hover:text-indigo-400">Contact</a></li>
+                  <li><a href="{% url 'books' %}" class="hover:underline hover:text-indigo-400">Browse Books</a></li>
+                </ul>
+              </div>
+
+              <!-- Social Media -->
+              <div>
+                <h4 class="text-md font-semibold mb-4 text-white">Follow Us</h4>
+                <div class="flex space-x-4 text-xl text-slate-300">
+                  <a href="#" class="hover:text-blue-500"><i class="fab fa-facebook"></i></a>
+                  <a href="#" class="hover:text-sky-400"><i class="fab fa-twitter"></i></a>
+                  <a href="#" class="hover:text-pink-500"><i class="fab fa-instagram"></i></a>
+                  <a href="#" class="hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </footer>
+
+
+        <hr class="border-t-2 border-slate-700 m-0 p-0">
+
+
+        <div class="relative h-16 overflow-hidden bg-slate-800 text-gray-200 border-t border-slate-700">
+          <div class="animate-modern-footer-up-down absolute w-full">
+            <p class="text-center text-sm text-white py-4 font-medium">
+              <i class="fas fa-book-open mr-2 text-indigo-400"></i>
+              &copy; 2025 Modern Library. Made with <span class="text-red-500">❤️</span> by IT Team:
+              <strong><a href="mailto:hackxyl58@gmail.com" class="hover:underline text-indigo-300">Mesh</a></strong>,
+              <strong><a href="mailto:leah@example.com" class="hover:underline text-indigo-300">Leah</a></strong> &
+              <strong><a href="mailto:billy@example.com" class="hover:underline text-indigo-300">Billy</a></strong>.
+            </p>
+          </div>
+        </div>
+
+        </body>
+        </html>

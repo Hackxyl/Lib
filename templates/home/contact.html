@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
+    <h2 class="text-2xl font-bold mb-4">Contact Us</h2>
+    
+    <!-- Non-field errors -->
+    {% if form.non_field_errors %}
+      <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      
+      <!-- Name Field -->
+      <div class="mb-4">
+        <label class="block mb-1">Your Name</label>
+        <input 
+          type="text" 
+          name="name" 
+          placeholder="Enter your Name" 
+          value="{{ form.name.value|default:'' }}"
+          class="w-full border rounded px-3 py-2 {% if form.name.errors %}border-red-500{% endif %}" 
+          required
+        >
+        {% if form.name.errors %}
+          <div class="text-red-500 text-sm mt-1">
+            {{ form.name.errors }}
+          </div>
+        {% endif %}
+      </div>
+      
+      <!-- Email Field -->
+      <div class="mb-4">
+        <label class="block mb-1">Your Email</label>
+        <input 
+          type="email" 
+          name="email" 
+          placeholder="Enter your Email" 
+          value="{{ form.email.value|default:'' }}"
+          class="w-full border rounded px-3 py-2 {% if form.email.errors %}border-red-500{% endif %}" 
+          required
+        >
+        {% if form.email.errors %}
+          <div class="text-red-500 text-sm mt-1">
+            {{ form.email.errors }}
+          </div>
+        {% endif %}
+      </div>
+      
+      <!-- Message Field -->
+      <div class="mb-4">
+        <label class="block mb-1">Message</label>
+        <textarea 
+          name="message" 
+          placeholder="Type your Message" 
+          class="w-full border rounded px-3 py-2 {% if form.message.errors %}border-red-500{% endif %}" 
+          rows="4" 
+          required
+        >{{ form.message.value|default:'' }}</textarea>
+        {% if form.message.errors %}
+          <div class="text-red-500 text-sm mt-1">
+            {{ form.message.errors }}
+          </div>
+        {% endif %}
+      </div>
+      
+      <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded">Send</button>
+    </form>
+  </div>
+{% endblock %}
